@@ -1,0 +1,702 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="description" content="Diccionario de datos en lenguaje claro para db_test_7b.">
+    <title>Navi System · Diccionario de datos · db_test_7b</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&family=Inter:wght@400;700;800&display=swap');
+
+        :root {
+            /* Tema Futaba Sakura (Persona 5) */
+            --bg: #090a0f;
+            --panel: #11151c;
+            --line: #222a35;
+            --text: #e4f2e8;
+            --muted: #6b8a7a;
+            --futaba-green: #39ff14; /* Verde neón hacker */
+            --futaba-green-glow: rgba(57, 255, 20, 0.4);
+            --futaba-orange: #ff7e27; /* Naranja chamarra/cabello */
+            --nav-bg: #050608;
+            --shadow: 0 12px 34px rgba(0, 0, 0, 0.8);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font: 15px/1.55 'Inter', ui-sans-serif, system-ui, sans-serif;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        button, input {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        /* --- EFECTO DE ESTRELLAS/LLUVIA DIGITAL --- */
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        body::before {
+            background-image:
+                radial-gradient(1.5px 1.5px at 10% 20%, var(--futaba-green), transparent),
+                radial-gradient(2px 2px at 30% 60%, #ffffff, transparent),
+                radial-gradient(1.5px 1.5px at 50% 10%, var(--futaba-orange), transparent),
+                radial-gradient(2px 2px at 70% 80%, var(--futaba-green), transparent),
+                radial-gradient(1.5px 1.5px at 90% 30%, #ffffff, transparent),
+                radial-gradient(1px 1px at 20% 80%, var(--futaba-green), transparent),
+                radial-gradient(1px 1px at 40% 10%, var(--futaba-orange), transparent),
+                radial-gradient(2px 2px at 60% 40%, #ffffff, transparent),
+                radial-gradient(1.5px 1.5px at 80% 90%, var(--futaba-green), transparent);
+            background-size: 300px 300px;
+            animation: starFall 15s linear infinite;
+            opacity: 0.5;
+        }
+
+        body::after {
+            background-image:
+                radial-gradient(1px 1px at 15% 15%, #ffffff, transparent),
+                radial-gradient(1px 1px at 35% 45%, var(--futaba-green), transparent),
+                radial-gradient(1px 1px at 55% 85%, var(--futaba-orange), transparent),
+                radial-gradient(1px 1px at 75% 25%, #ffffff, transparent),
+                radial-gradient(1px 1px at 95% 65%, var(--futaba-green), transparent);
+            background-size: 400px 400px;
+            animation: starFall 30s linear infinite;
+            opacity: 0.25;
+        }
+
+        @keyframes starFall {
+            0% { background-position: 0px 0px; }
+            100% { background-position: 0px 1200px; }
+        }
+
+        .shell {
+            max-width: 1200px;
+            margin: auto;
+            padding: 32px 28px 64px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .topline {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--futaba-green);
+            font-size: .78rem;
+            font-weight: 900;
+            letter-spacing: .2em;
+            text-transform: uppercase;
+            text-shadow: 0 0 5px var(--futaba-green-glow);
+        }
+
+        .mark {
+            width: 32px;
+            height: 32px;
+            border-radius: 9px;
+            background: linear-gradient(135deg, var(--futaba-green), #148030);
+            color: #000;
+            display: grid;
+            place-items: center;
+            font-size: 17px;
+            font-weight: 900;
+            box-shadow: 0 0 8px var(--futaba-green-glow);
+        }
+
+        h1 {
+            font-size: clamp(2rem, 4.4vw, 3.2rem);
+            letter-spacing: -.045em;
+            line-height: 1.07;
+            margin: 22px 0 12px;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .intro {
+            max-width: 700px;
+            color: var(--muted);
+            font-size: 1.06rem;
+            margin: 0 0 25px;
+        }
+
+        .stats {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 24px 0 28px;
+        }
+
+        .stat {
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            padding: 13px 18px;
+            min-width: 150px;
+            box-shadow: var(--shadow);
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 1.35rem;
+            letter-spacing: -.03em;
+            color: var(--futaba-green);
+            font-family: 'Fira Code', monospace;
+        }
+
+        .stat span {
+            color: var(--muted);
+            font-size: .84rem;
+        }
+
+        .toolbar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: rgba(5, 6, 8, 0.85);
+            padding: 12px 0;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--line);
+        }
+
+        .searchbox {
+            position: relative;
+            flex: 1;
+        }
+
+        .searchbox input {
+            width: 100%;
+            height: 48px;
+            padding: 0 44px;
+            border: 1px solid var(--line);
+            border-radius: 13px;
+            background: var(--panel);
+            color: var(--text);
+            outline: none;
+            box-shadow: var(--shadow);
+            transition: all .2s;
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+        }
+
+        .searchbox input:focus {
+            border-color: var(--futaba-green);
+            box-shadow: 0 0 10px var(--futaba-green-glow);
+        }
+
+        .searchicon {
+            position: absolute;
+            left: 15px;
+            top: 12px;
+            color: var(--muted);
+        }
+
+        .key {
+            position: absolute;
+            right: 12px;
+            top: 13px;
+            color: var(--futaba-green);
+            font-size: .75rem;
+            border: 1px solid var(--line);
+            border-radius: 5px;
+            padding: 2px 6px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .action {
+            height: 44px;
+            border: 1px solid var(--line);
+            background: var(--panel);
+            color: var(--text);
+            border-radius: 11px;
+            padding: 0 14px;
+            font-weight: 700;
+            white-space: nowrap;
+            transition: all .2s;
+        }
+
+        .action:hover {
+            border-color: var(--futaba-green);
+            color: var(--futaba-green);
+            background: rgba(57, 255, 20, 0.1);
+        }
+
+        .result {
+            font-size: .86rem;
+            color: var(--muted);
+            padding: 8px 2px 13px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* --- CARDS Y TABLAS --- */
+        .table-card {
+            border: 1px solid var(--line);
+            background: var(--panel);
+            border-radius: 16px;
+            margin: 0 0 13px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: appear .38s both;
+            transition: box-shadow .2s, border-color .2s;
+        }
+
+        .table-card:hover {
+            border-color: var(--futaba-green);
+            box-shadow: 0 0 15px var(--futaba-green-glow);
+        }
+
+        .table-head {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: left;
+            padding: 19px 22px;
+            border: 0;
+            background: transparent;
+            color: inherit;
+            transition: background 0.2s;
+        }
+
+        .table-head:hover {
+            background: rgba(57, 255, 20, 0.04);
+        }
+
+        .table-icon {
+            width: 40px;
+            height: 40px;
+            display: grid;
+            place-items: center;
+            background: rgba(255, 126, 39, 0.15);
+            color: var(--futaba-orange);
+            border-radius: 12px;
+            flex: none;
+            font-size: 18px;
+        }
+
+        .table-title {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .table-title code {
+            font: 800 1.05rem 'Fira Code', monospace;
+            overflow-wrap: anywhere;
+            color: var(--text);
+        }
+
+        .table-title small {
+            display: block;
+            color: var(--muted);
+            font-size: .9rem;
+            margin-top: 3px;
+        }
+
+        .count {
+            background: var(--futaba-green);
+            border-radius: 99px;
+            padding: 5px 12px;
+            color: var(--bg);
+            font-weight: 800;
+            font-size: .8rem;
+            white-space: nowrap;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .chev {
+            color: var(--muted);
+            transition: transform .24s, color .24s;
+            font-size: 1.2rem;
+        }
+
+        .table-card.open .chev {
+            transform: rotate(180deg);
+            color: var(--futaba-green);
+        }
+
+        .details {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows .3s ease;
+        }
+
+        .table-card.open .details {
+            grid-template-rows: 1fr;
+        }
+
+        .details-inner {
+            overflow: hidden;
+        }
+
+        .table-card.open .details-inner {
+            border-top: 1px solid var(--line);
+        }
+
+        .detail-pad {
+            padding: 20px 22px 24px;
+        }
+
+        .relation {
+            background: rgba(57, 255, 20, 0.05);
+            border-left: 3px solid var(--futaba-green);
+            padding: 12px 14px;
+            border-radius: 0 10px 10px 0;
+            color: var(--text);
+            margin: 0 0 18px;
+            font-size: .91rem;
+        }
+
+        .relation b, code {
+            font-family: 'Fira Code', monospace;
+            color: var(--futaba-green);
+        }
+
+        .section-label {
+            color: var(--muted);
+            font-size: .74rem;
+            text-transform: uppercase;
+            font-weight: 800;
+            letter-spacing: .09em;
+            margin: 20px 0 9px;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .col-head, .column {
+            display: grid;
+            grid-template-columns: minmax(130px, 1.15fr) minmax(105px, .85fr) minmax(190px, 1.55fr) minmax(145px, 1.05fr);
+            gap: 14px;
+            align-items: start;
+        }
+
+        .col-head {
+            padding: 0 12px 8px;
+            color: var(--muted);
+            text-transform: uppercase;
+            font-size: .7rem;
+            font-weight: 800;
+            letter-spacing: .08em;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .column {
+            padding: 13px 12px;
+            border-top: 1px solid var(--line);
+            transition: background .2s, border-left .2s;
+        }
+
+        .column:hover {
+            background: rgba(57, 255, 20, 0.04);
+            border-left: 2px solid var(--futaba-green);
+        }
+
+        .field-name {
+            font: 700 .86rem 'Fira Code', monospace;
+            overflow-wrap: anywhere;
+            color: var(--text);
+        }
+
+        .field-type {
+            font: .79rem 'Fira Code', monospace;
+            color: var(--muted);
+            overflow-wrap: anywhere;
+        }
+
+        .meaning {
+            color: var(--text);
+            font-size: .89rem;
+        }
+
+        .badges {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border-radius: 99px;
+            padding: 3px 8px;
+            font-size: .71rem;
+            font-weight: 700;
+            white-space: nowrap;
+            font-family: 'Fira Code', monospace;
+        }
+
+        .kind { background: rgba(255, 255, 255, 0.08); color: var(--text); }
+        .pk { background: rgba(255, 126, 39, 0.2); color: var(--futaba-orange); border: 1px solid rgba(255, 126, 39, 0.4); }
+        .fk { background: rgba(57, 255, 20, 0.15); color: var(--futaba-green); border: 1px solid rgba(57, 255, 20, 0.3); }
+        .required { background: rgba(57, 255, 20, 0.08); color: var(--futaba-green); }
+        .optional { background: rgba(255, 255, 255, 0.05); color: var(--muted); }
+        .generated { background: rgba(180, 100, 255, 0.15); color: #c892ff; }
+
+        .empty {
+            background: var(--panel);
+            border: 1px dashed var(--line);
+            padding: 30px;
+            border-radius: 14px;
+            text-align: center;
+            color: var(--muted);
+            font-family: 'Fira Code', monospace;
+        }
+
+        footer {
+            margin-top: 30px;
+            border-top: 1px solid var(--line);
+            padding-top: 18px;
+            color: var(--muted);
+            font-size: .82rem;
+        }
+
+        /* --- FUTABA CHIBI PET --- */
+        #futaba-pet {
+            position: fixed;
+            bottom: 20px;
+            right: 25px;
+            width: 110px;
+            z-index: 100;
+            cursor: pointer;
+            filter: drop-shadow(0 5px 15px var(--futaba-green-glow));
+            transition: transform 0.2s ease;
+            user-select: none;
+        }
+
+        #futaba-pet:hover {
+            transform: scale(1.08);
+        }
+
+        @keyframes softJump {
+            0%   { transform: translateY(0) scale(1, 1); }
+            30%  { transform: translateY(-20px) scale(0.9, 1.1); }
+            50%  { transform: translateY(-25px) scale(1.05, 0.95); }
+            70%  { transform: translateY(-10px) scale(0.95, 1.05); }
+            100% { transform: translateY(0) scale(1, 1); }
+        }
+
+        .jumping {
+            animation: softJump 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        .no-motion * {
+            animation: none !important;
+            transition: none !important;
+        }
+
+        @keyframes appear {
+            from { opacity: 0; transform: translateY(7px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media(max-width:760px) {
+            .shell { padding: 23px 15px 45px; }
+            .toolbar { flex-wrap: wrap; }
+            .searchbox { flex-basis: 100%; }
+            .table-head { padding: 15px; }
+            .table-icon { width: 35px; height: 35px; }
+            .count { font-size: .72rem; padding: 5px 8px; }
+            .detail-pad { padding: 16px 13px; }
+            .col-head { display: none; }
+            .column { grid-template-columns: 1fr 1fr; gap: 8px 12px; padding: 12px 8px; }
+            .field-name { grid-column: 1; }
+            .field-type { grid-column: 2; }
+            .meaning { grid-column: 1/-1; }
+            .badges { grid-column: 1/-1; }
+            .stats { gap: 8px; }
+            .stat { flex: 1; min-width: 115px; padding: 11px 13px; }
+            #futaba-pet { width: 85px; bottom: 15px; right: 15px; }
+        }
+
+        @media(prefers-reduced-motion:reduce) {
+            *, *::before, *::after {
+                animation-duration: .01ms !important;
+                transition-duration: .01ms !important;
+                scroll-behavior: auto !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="shell">
+        <div class="topline"><span class="mark" aria-hidden="true">★</span> Navi System · <span id="db-name">db_test_7b</span></div>
+        <h1>Diccionario de datos</h1>
+        <p class="intro">Explora qué información guarda cada parte de la plataforma, cómo se relaciona y qué significa cada campo. Las etiquetas técnicas se acompañan de una explicación cotidiana.</p>
+        
+        <section class="stats" aria-label="Resumen del respaldo">
+            <div class="stat"><strong id="table-total">—</strong><span>tablas documentadas</span></div>
+            <div class="stat"><strong id="record-total">—</strong><span>registros incluidos</span></div>
+            <div class="stat"><strong id="field-total">—</strong><span>campos explicados</span></div>
+        </section>
+
+        <div class="toolbar">
+            <label class="searchbox">
+                <span class="searchicon" aria-hidden="true">⌕</span>
+                <input id="search" type="search" placeholder="Buscar una tabla, campo o significado..." aria-label="Buscar en el diccionario">
+                <span class="key">/</span>
+            </label>
+            <button class="action" id="expand" type="button">Expandir todo</button>
+            <button class="action" id="clear" type="button">Limpiar</button>
+        </div>
+
+        <div class="result" id="result-count" aria-live="polite"></div>
+        <section id="tables" aria-label="Tablas del diccionario"></section>
+
+        <footer>Fuente: <span id="source-name"></span>. Los conteos corresponden a las filas incluidas en las sentencias <code>INSERT</code> del respaldo. Las descripciones funcionales se infieren del esquema y los nombres de los campos.</footer>
+    </main>
+
+    <!-- Futaba Chibi Mascot -->
+    <img src="futaba-chibi.png" id="futaba-pet" alt="Futaba Oracle">
+
+    <script src="dictionary-data.js"></script>
+    <script>
+        (() => {
+            const data = window.DICTIONARY_DATA, 
+                  host = document.querySelector('#tables'), 
+                  input = document.querySelector('#search'), 
+                  cards = [];
+            
+            const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+            const fmt = n => new Intl.NumberFormat('es-MX').format(n);
+            
+            function kind(t) {
+                t = t.toLowerCase();
+                if (/date|time|year/.test(t)) return ['◷', 'Fecha/hora'];
+                if (/bit|bool|tinyint\(1\)/.test(t)) return ['✓', 'Booleano'];
+                if (/int|decimal|numeric|float|double|real/.test(t)) return ['#', 'Número'];
+                if (/char|text|enum|set/.test(t)) return ['T', 'Texto'];
+                return ['•', 'Otro'];
+            }
+
+            function render() {
+                document.querySelector('#db-name').textContent = data.database;
+                document.querySelector('#source-name').textContent = data.source;
+                document.querySelector('#table-total').textContent = fmt(data.tables.length);
+                document.querySelector('#record-total').textContent = fmt(data.tables.reduce((a, t) => a + t.rows, 0));
+                document.querySelector('#field-total').textContent = fmt(data.tables.reduce((a, t) => a + t.columns.length, 0));
+
+                data.tables.forEach((t, i) => {
+                    const rel = t.relations.length ? t.relations.map(r => `<div class="relation">Los registros de <b>${esc(t.name)}</b> se conectan con <b>${esc(r.table)}</b> mediante ${r.columns.map((c, j) => `<code>${esc(c)}</code> ↔ <code>${esc(r.references[j] || '')}</code>`).join(', ')}. Esto permite asociar la información relacionada entre ambas tablas.</div>`).join('') : '<div class="relation">El respaldo no declara una conexión directa con otra tabla.</div>';
+                    
+                    const rows = t.columns.map(c => {
+                        const [icon, label] = kind(c.type);
+                        const badges = [
+                            `<span class="badge kind">${icon} ${label}</span>`,
+                            c.pk ? '<span class="badge pk">◆ PK</span>' : '',
+                            c.fks.length ? '<span class="badge fk">↗ FK</span>' : '',
+                            `<span class="badge ${c.nullable ? 'optional' : 'required'}">${c.nullable ? 'Opcional' : 'Obligatorio'}</span>`,
+                            c.generated ? '<span class="badge generated">Calculado</span>' : ''
+                        ].join('');
+                        return `<div class="column" data-search="${esc((c.name + ' ' + c.type + ' ' + c.description + ' ' + (c.pk ? 'primary key ' : '') + (c.fks.map(f => f.table + ' ' + f.column).join(' '))).toLowerCase())}"><div class="field-name">${esc(c.name)}</div><div class="field-type">${esc(c.type)}</div><div class="meaning">${esc(c.description)}</div><div class="badges">${badges}</div></div>`;
+                    }).join('');
+
+                    const card = document.createElement('article');
+                    card.className = 'table-card';
+                    card.style.animationDelay = Math.min(i * 25, 300) + 'ms';
+                    card.dataset.search = (t.name + ' ' + t.description).toLowerCase();
+                    card.innerHTML = `<button class="table-head" type="button" aria-expanded="false"><span class="table-icon" aria-hidden="true">🗄️</span><span class="table-title"><code>${esc(t.name)}</code><small>${esc(t.description)}</small></span><span class="count">${fmt(t.rows)} filas</span><span class="chev" aria-hidden="true">⌄</span></button><div class="details"><div class="details-inner"><div class="detail-pad">${rel}<div class="section-label">Campos de la tabla · ${t.columns.length}</div><div class="col-head"><span>Nombre técnico</span><span>Tipo SQL</span><span>Qué significa</span><span>Atributos</span></div>${rows}</div></div></div>`;
+
+                    const head = card.querySelector('.table-head');
+                    head.addEventListener('click', () => {
+                        card.classList.toggle('open');
+                        head.setAttribute('aria-expanded', card.classList.contains('open'));
+                    });
+                    cards.push(card);
+                    host.append(card);
+                });
+                filter();
+            }
+
+            function filter() {
+                const q = input.value.trim().toLocaleLowerCase('es');
+                let visible = 0;
+                cards.forEach(card => {
+                    const tableMatch = card.dataset.search.includes(q), 
+                          rows = [...card.querySelectorAll('.column')], 
+                          colMatch = rows.some(row => row.dataset.search.includes(q)), 
+                          matches = !q || tableMatch || colMatch;
+                    
+                    card.hidden = !matches;
+                    rows.forEach(row => row.hidden = !!q && !tableMatch && !row.dataset.search.includes(q));
+                    
+                    if (matches) {
+                        visible++;
+                        if (q) {
+                            card.classList.add('open');
+                            card.querySelector('.table-head').setAttribute('aria-expanded', 'true');
+                        }
+                    } else {
+                        card.classList.remove('open');
+                    }
+                });
+                document.querySelector('#result-count').textContent = q ? `${visible} ${visible === 1 ? 'tabla coincide' : 'tablas coinciden'} con “${input.value.trim()}”.` : `Mostrando ${visible} ${visible === 1 ? 'tabla' : 'tablas'}.`;
+            }
+
+            input.addEventListener('input', filter);
+            
+            document.querySelector('#expand').addEventListener('click', () => {
+                const open = cards.some(c => !c.hidden && !c.classList.contains('open'));
+                cards.forEach(c => {
+                    if (!c.hidden) {
+                        c.classList.toggle('open', open);
+                        c.querySelector('.table-head').setAttribute('aria-expanded', open);
+                    }
+                });
+                document.querySelector('#expand').textContent = open ? 'Colapsar todo' : 'Expandir todo';
+            });
+
+            document.querySelector('#clear').addEventListener('click', () => {
+                input.value = '';
+                filter();
+                input.focus();
+            });
+
+            document.addEventListener('keydown', e => {
+                if (e.key === '/' && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName)) {
+                    e.preventDefault();
+                    input.focus();
+                }
+                if (e.key === 'Escape' && document.activeElement === input) {
+                    input.value = '';
+                    filter();
+                    input.blur();
+                }
+            });
+
+            // --- Interacción Futaba Chibi Mascot ---
+            const futaba = document.getElementById('futaba-pet');
+            if (futaba) {
+                futaba.addEventListener('click', () => {
+                    futaba.classList.remove('jumping');
+                    void futaba.offsetWidth; // Force reflow
+                    futaba.classList.add('jumping');
+                });
+            }
+
+            if (data) render();
+            else host.innerHTML = '<div class="empty">[ERROR] No se encontró dictionary-data.js. Ejecuta build_dictionary.py para generar los datos.</div>';
+        })();
+    </script>
+</body>
+
+</html>
